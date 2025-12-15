@@ -1,0 +1,22 @@
+import express from 'express';
+import { sequelize } from './config/db/db_configs.js';
+import dotenv from 'dotenv';
+import { authRoute } from './src/auth/authRoute.js';
+import errorMiddleware from './libs/errorMiddleware.js';
+import { signupValidator } from './src/auth/middlewares/signupValidator.js';
+dotenv.config();
+
+const app = express();
+const { PORT } = process.env || 3060;
+
+app.use(express.json());
+app.use(express.urlencoded());
+app.use('/auth', authRoute);
+app.use(errorMiddleware);
+
+sequelize.sync({alter:true}).then(() => {
+    console.log("database connected");
+});
+
+
+app.listen(PORT, () => console.log(`http://localhost:${PORT}`));
