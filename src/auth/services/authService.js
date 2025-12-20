@@ -3,12 +3,13 @@ import { User } from "../../../config/db/index.js";
 import { userDto } from "../dtos/userDto.js";
 import { generateToken } from "../middlewares/jwt.js";
 import userService from "./userService.js";
+import ApiError from "../../../libs/apiError.js";
 
 class authService {
 
   async login(data) {
     if (!data) {
-      throw new Error("User not found");
+      throw new ApiError.NotFound("User not found");
     }
     const user = await userService.findByUserName(data.userName);
     const token = generateToken({ id: user.id, username: user.userName });
@@ -24,7 +25,7 @@ class authService {
 
 
     if (!user) {
-      throw new Error("Invalid credentials");
+      throw new ApiError.BadRequest("Invalid credentials");
     }
 
     const userDtoData = userDto(user);

@@ -1,3 +1,5 @@
+import { isPrimitive } from "sequelize/lib/utils";
+
 export default function (sequelize, DataTypes) {
     return sequelize.define("User", {
         id: {
@@ -14,12 +16,21 @@ export default function (sequelize, DataTypes) {
             type: DataTypes.STRING,
             allowNull: false
         },
+        avatarUrl: {
+            type: DataTypes.STRING(500), 
+            allowNull: true,
+            field: "avatar_url"
+        },
+        isPrivate: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false
+        },
         password: {
             type: DataTypes.STRING,
             allowNull: false
         }
-    }, { 
+    }, {
         tableName: "users",
-        timestamps: false 
+        timestamps: false
     });
 };
