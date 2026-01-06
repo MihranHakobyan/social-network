@@ -19,4 +19,15 @@ User.belongsToMany(User, {
   otherKey: "followerId"
 });
 
+Follower.belongsTo(User, {
+  as: "followers",
+  foreignKey: "followerId"
+});
+
+Follower.belongsTo(User, {
+  as: "following",
+  foreignKey: "followingId"
+});
+
+
 export { User, Follower };

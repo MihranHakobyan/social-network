@@ -1,13 +1,13 @@
 import { User } from "../../../config/db/index.js";
 import ApiError from "../../../libs/apiError.js";
 import { userDto } from "../dtos/userDto.js";
-import followerService from "../../account/followerService.js";
+
 class userService {
     async findUserById(userId) {
-        const user = await User.findOne({ where: { id: userId } });
+        const user = await User.findByPk(userId);
         if (!user) {
-            throw new ApiError(404, "User not found");
-        }
+            throw  ApiError.NotFound( "User not found");
+        }        
         return user;
     }
     async findByLogin(login) {
@@ -43,16 +43,6 @@ class userService {
         user.isPrivate = !user.isPrivate;
         await user.save();
         return { privacy: user.isPrivate };
-    }
-
-    async getFollowers(userId, findeId = userId) {
-        const allFollowers = await followerService.findeAllFollowers(findeId);
-        return allFollowers;
-    }
-
-    async getFollowings(userId, findeId = userId) {         
-        const allFollowings = await followerService.findeAllFollowings(findeId);
-        return allFollowings;
     }
 }
 

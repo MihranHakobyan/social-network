@@ -6,7 +6,7 @@ class ApiError extends Error {
     this.statusCode = statusCode;
   }
 
-  static BadRequest(message) {
+  static BadRequest(message="Bad Request") {
     return new ApiError(httpStatusCodes.BAD_REQUEST, message);
   }
 

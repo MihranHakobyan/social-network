@@ -2,8 +2,9 @@ import httpStatusCodes from "./httpStatusCodes.js";
 import ApiError from "./apiError.js";
 
 export default function errorMiddleware(err, req, res, next) {
+  console.log(err.message,err.stack);
   
-
+  
   if (err instanceof ApiError) {
     return res.status(err.statusCode).json({
       ok: false,

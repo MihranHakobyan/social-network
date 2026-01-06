@@ -10,9 +10,9 @@ export default (sequelize, DataTypes) => {
                 type: DataTypes.INTEGER,
                 allowNull: false
             },
-            accepted: {
-                type: DataTypes.BOOLEAN,
-                defaultValue: true
+            status: {
+                type: DataTypes.ENUM("requested", "followed", "unfollowed"),
+                defaultValue: "requested"
             }
         },
         {

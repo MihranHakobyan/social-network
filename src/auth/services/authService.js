@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import { User } from "../../../config/db/index.js";
 import { userDto } from "../dtos/userDto.js";
-import { generateToken } from "../middlewares/jwt.js";
+import { generateToken } from "../../../libs/jwt.js";
 import userService from "./userService.js";
 import ApiError from "../../../libs/apiError.js";
 
@@ -9,25 +9,22 @@ class authService {
 
   async login(data) {
     if (!data) {
-      throw new ApiError.NotFound("User not found");
+      throw  ApiError.NotFound("User not found");
     }
+
     const user = await userService.findByUserName(data.userName);
-    const token = generateToken({ id: user.id, username: user.userName });
+    if (!user) {
+      throw ApiError.BadRequest("User not found");
+    }
 
     const isValidPassword = await bcrypt.compare(
       data.password,
       user.password
     );
-
     if (!isValidPassword) {
-      throw ApiError.BadRequestError("Password is not correct");
+      throw ApiError.BadRequest("Password is not correct");
     }
-
-
-    if (!user) {
-      throw new ApiError.BadRequest("Invalid credentials");
-    }
-
+    const token = generateToken({ id: user.id, username: user.userName });
     const userDtoData = userDto(user);
     return { ...userDtoData, ...token };
   }
@@ -39,7 +36,9 @@ class authService {
       name: data.name,
       surName: data.surName,
       userName: data.userName,
-      password: hashedPassword
+      password: hashedPassword,
+      avatarUrl: data.avatarUrl || null,
+      isPrivate: data.isPrivate || false
     });
 
     const token = generateToken({

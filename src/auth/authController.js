@@ -4,9 +4,9 @@ import userService from "./services/userService.js";
 class AuthController {
   async login(req, res, next) {
     try {
-      const user = await authService.login(req.body);
+      const user = await authService.login(req.body);     
       res.status(200).json({ user, ok: true });
-    } catch (error) {
+    } catch (error) {           
       next(error);
     }
   }
@@ -44,24 +44,6 @@ class AuthController {
     try {
       const privacySettings = await userService.changePrivacySettings(req.user.id);
       res.status(200).json({ privacySettings, ok: true });
-    } catch (error) {
-      next(error);
-    }
-  }
-
-  async getFollowers(req, res, next) {
-    try {
-      const followers = await userService.getFollowers(req.user.id, req.body.findeId);
-      res.status(200).json({ followers, ok: true });
-    } catch (error) {
-      next(error);
-    }
-  }
-
-  async getFollowings(req, res, next) {
-    try {
-      const followings = await userService.getFollowings(req.user.id, req.body.findeId);
-      res.status(200).json({ followings, ok: true });
     } catch (error) {
       next(error);
     }
